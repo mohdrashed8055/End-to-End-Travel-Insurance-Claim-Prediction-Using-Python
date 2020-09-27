@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Travel Insurance Claim Prediction</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <style>
+      html, body {
+      min-height: 100%;
+      }
+      body, div, form, input, select, textarea, p { 
+      padding: 0;
+      margin: 0;
+      outline: none;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 22px;
+      }
+      h1 {
+      position: absolute;
+      margin: 0;
+      font-size: 38px;
+      color: #fff;
+      z-index: 2;
+      }
+      .testbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      padding: 20px;
+      }
+      form {
+      width: 100%;
+      padding: 20px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 0 25px 0 #892e9b; 
+      }
+      .banner {
+      position: relative;
+      height: 80px;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      }
+      .banner::after {
+      content: "";
+      background-color: rgba(80, 120, 180, 2); 
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      }
+      input, select, textarea {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      }
+      input {
+      width: calc(100% - 10px);
+      padding: 5px;
+      }
+      input[type="date"] {
+      padding: 4px 5px;
+      }
+      select {
+      width: 100%;
+      padding: 7px 0;
+      background: transparent;
+      }
+      textarea {
+      width: calc(100% - 12px);
+      padding: 5px;
+      }
+      .item:hover p, .item:hover i, .question:hover p, .question label:hover, input:hover::placeholder {
+      color: #892e9b;
+      }
+      .item input:hover, .item select:hover, .item textarea:hover {
+      border: 1px solid transparent;
+      box-shadow: 0 0 6px 0 #892e9b;
+      color: #892e9b;
+      }
+      .item {
+      position: relative;
+      margin: 10px 0;
+      }
+      input[type="date"]::-webkit-inner-spin-button {
+      display: none;
+      }
+      .item i, input[type="date"]::-webkit-calendar-picker-indicator {
+      position: absolute;
+      font-size: 20px;
+      color: #a9a9a9;
+      }
+      .item i {
+      right: 2%;
+      top: 30px;
+      z-index: 1;
+      }
+      [type="date"]::-webkit-calendar-picker-indicator {
+      right: 1%;
+      z-index: 2;
+      opacity: 0;
+      cursor: pointer;
+      }
+      input[type=radio], input[type=checkbox]  {
+      display: none;
+      }
+      label.radio {
+      position: relative;
+      display: inline-block;
+      margin: 5px 20px 15px 0;
+      cursor: pointer;
+      }
+      .question span {
+      margin-left: 30px;
+      }
+      label.radio:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      }
+      input[type=radio]:checked + label:before, label.radio:hover:before {
+      border: 2px solid #892e9b;
+      }
+      label.radio:after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 5px;
+      width: 8px;
+      height: 4px;
+      border: 3px solid #892e9b;
+      border-top: none;
+      border-right: none;
+      transform: rotate(-45deg);
+      opacity: 0;
+      }
+      input[type=radio]:checked + label:after {
+      opacity: 1;
+      }
+      .btn-block {
+      margin-top: 10px;
+      text-align: center;
+      }
+      button {
+      width: 150px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px; 
+      background: #892e9b;
+      font-size: 16px;
+      color: #fff;
+      cursor: pointer;
+      }
+      button:hover {
+      background: #b52ed1;
+      }
+      @media (min-width: 568px) {
+      .name-item, .city-item {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      }
+      .name-item input, .city-item input {
+      width: calc(50% - 20px);
+      }
+      .city-item select {
+      width: calc(50% - 8px);
+      }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="testbox">
+	  <!-- Main Input For Receiving Query to our ML -->
+      <form action="/result" method="post">
+        <div class="banner">
+          <h1>Travel Insurance Claim Application</h1>
+        </div>
+		<div class="banner">
+		  <h1 align="center"> {{ prediction }}</h1>
+        </div>
+		<div>
+        <div class="item">
+          <h4>Agency</h4>
+		  <select id="Agency" name="Agency">
+		  <option value="0">ADM</option> 
+          <option value="1">ART</option> 
+		  <option value="2">C2B</option> 
+		  <option value="3">CBH</option> 
+		  <option value="4">CCR</option> 
+		  <option value="5">CSR</option> 
+		  <option value="6">CWT</option> 
+		  <option value="7">EPX</option>
+		  <option value="8">JWT</option> 
+		  <option value="9">JZI</option> 
+		  <option value="10">KML</option> 
+		  <option value="11">LWC</option> 
+		  <option value="12">RAB</option> 
+		  <option value="13">SSI</option> 
+		  <option value="14">TST</option
+		  <option value="15">TTW</option>
+		  </select>
+        </div>
+        <div class="item">
+        <p><h4>Product Name</h4></p>
+          <select id="Product Name" name="Product Name>
+		  <option value="0">1 way Comprehensive Plan</option> 
+          <option value="1">2 way Comprehensive Plan </option> 
+		  <option value="2">24 Protect</option> 
+		  <option value="3">Annual Gold Plan</option> 
+		  <option value="4">Annual Silver Plan</option> 
+		  <option value="5">Annual Travel Protect Gold</option> 
+		  <option value="6">Annual Travel Protect Platinum</option> 
+		  <option value="7">Annual Travel Protect Silver</option>
+		  <option value="8">Basic Plan</option> 
+          <option value="9">Bronze Plan</option> 
+		  <option value="10">Cancellation Plan</option> 
+		  <option value="11">Child Comprehensive Plan</option> 
+		  <option value="12">Comprehensive Plan</option> 
+		  <option value="13">Gold Plan</option> 
+		  <option value="14">Individual Comprehensive Plan</option> 
+		  <option value="15">Premier Plan</option>
+		  <option value="16">Rental Vehicle Excess Insurance</option> 
+		  <option value="17">Silver Plan</option> 
+		  <option value="18">Single Trip Travel Protect Gold</option> 
+		  <option value="19">Single Trip Travel Protect Platinum</option> 
+		  <option value="20">Single Trip Travel Protect Silver</option>
+		  <option value="21">Spouse or Parents Comprehensive Plan</option> 
+		  <option value="22">Ticket Protector</option> 
+		  <option value="23">Travel Cruise Protect</option> 
+		  <option value="24">Travel Cruise Protect Family</option>
+		  <option value="25">Value Plan</option> 
+		  </select>
+        </div>
+        <div class="item">
+          <p><h4>Duration</h4></p>
+          <input type="text" align="center" name="Duration" placeholder="Duration" required="required" />
+         </div>
+        <div class="item">
+          <p><h4>Destination</h4></p>
+          <select id="Destination" name="Destination">
+		  <option value="0">ALBANIA</option>
+		  <option value="1">ANGOLA</option>
+		  <option value="2">ARGENTINA</option>
+		  <option value="3">ARMENIA</option>
+		  <option value="4">AUSTRALIA</option>
+		  <option value="5">AUSTRIA</option>
+		  <option value="6">AZERBAIJAN</option>
+		  <option value="7">BAHRAIN</option>
+		  <option value="8">BANGLADESH</option>
+		  <option value="9">BARBADOS</option>
+		  <option value="10">BELARUS</option>
+		  <option value="11">BELGIUM</option>
+		  <option value="12">BENIN</option>
+		  <option value="13">BERMUDA</option>
+		  <option value="14">BHUTAN</option>
+		  <option value="15">BOLIVIA</option>
+		  <option value="16">BOSNIA AND HERZEGOVINA</option>
+		  <option value="17">BOTSWANA</option>
+		  <option value="18">BRAZIL</option>
+		  <option value="19">BRUNEI DARUSSALAM</option>
+		  <option value="20">BULGARIA</option>
+		  <option value="21">CAMBODIA</option>
+		  <option value="22">CAMEROON</option>
+		  <option value="23">CANADA</option>
+		  <option value="24">CAYMAN ISLANDS</option>
+		  <option value="25">CHILE</option>
+		  <option value="26">CHINA</option>
+		  <option value="27">COLOMBIA</option>
+		  <option value="28">COSTA RICA</option>
+		  <option value="29">CROATIA</option>
+		  <option value="30">CYPRUS</option>
+		  <option value="31">CZECH REPUBLIC</option>
+		  <option value="32">DENMARK</option>
+		  <option value="33">DOMINICAN REPUBLIC</option>
+		  <option value="34">ECUADOR</option>
+		  <option value="35">EGYPT</option>
+		  <option value="36">ESTONIA</option>
+		  <option value="37">ETHIOPIA</option>
+		  <option value="38">FAROE ISLANDS</option>
+		  <option value="39">FIJI</option>
+		  <option value="40">FINLAND</option>
+		  <option value="41">FRANCE</option>
+		  <option value="42">FRENCH POLYNESIA</option>
+		  <option value="43">GEORGIA</option>
+		  <option value="44">GERMANY</option>
+		  <option value="45">GHANA</option>
+		  <option value="46">GREECE</option>
+		  <option value="47">GUADELOUPE</option>
+		  <option value="48">GUAM</option>
+		  <option value="49">GUATEMALA</option>
+		  <option value="50">GUINEA</option>
+		  <option value="51">GUINEA-BISSAU</option>
+		  <option value="52">GUYANA</option>
+		  <option value="53">HONG KONG</option>
+		  <option value="54">HUNGARY</option>
+		  <option value="55">ICELAND</option>
+		  <option value="56">INDIA</option>
+		  <option value="57">INDONESIA</option>
+		  <option value="58">IRAN, ISLAMIC REPUBLIC OF</option>
+		  <option value="59">IRELAND</option>
+		  <option value="60">ISRAEL</option>
+		  <option value="61">ITALY</option>
+		  <option value="62">JAMAICA</option>
+		  <option value="63">JAPAN</option>
+		  <option value="64">JORDAN</option>
+		  <option value="65">KAZAKHSTAN</option>
+		  <option value="66">KENYA</option>
+		  <option value="67">KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF</option>
+		  <option value="68">KOREA, REPUBLIC OF</option>
+		  <option value="69">KUWAIT</option>
+		  <option value="70">KYRGYZSTAN</option>
+		  <option value="71">LAO PEOPLE'S DEMOCRATIC REPUBLIC</option>
+		  <option value="72">LATVIA</option>
+		  <option value="73">LEBANON</option>
+		  <option value="74">LIBYAN ARAB JAMAHIRIYA</option>
+    	  <option value="75">LITHUANIA</option>
+    	  <option value="76">LUXEMBOURG</option>
+    	  <option value="77">MACAO</option>
+    	  <option value="78">MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF</option>
+    	  <option value="79">MALAYSIA</option>
+    	  <option value="80">MALDIVES</option>
+    	  <option value="81">MALI</option>
+    	  <option value="82">MALTA</option>
+    	  <option value="83">MAURITIUS</option>
+    	  <option value="84">MEXICO</option>
+          <option value="85">MOLDOVA, REPUBLIC OF</option>
+    	  <option value="86">MONGOLIA</option>
+    	  <option value="87">MOROCCO</option>
+    	  <option value="88">MYANMAR</option>
+    	  <option value="89">NAMIBIA</option>
+    	  <option value="90">NEPAL</option>
+    	  <option value="91">NETHERLANDS</option>
+		  <option value="92">NEW CALEDONIA</option>
+		  <option value="93">NEW ZEALAND</option>
+		  <option value="94">NIGERIA</option>
+		  <option value="95">NORTHERN MARIANA ISLANDS</option>
+		  <option value="96">NORWAY</option>
+		  <option value="97">OMAN</option>
+		  <option value="98">PAKISTAN</option>
+		  <option value="99">PANAMA</option>
+		  <option value="100">PAPUA NEW GUINEA</option>
+		  <option value="101">PERU</option>
+		  <option value="102">PHILIPPINES</option>
+		  <option value="103">POLAND</option>
+		  <option value="104">PORTUGAL</option>
+		  <option value="105">PUERTO RICO</option>
+		  <option value="106">QATAR</option>
+		  <option value="107">REPUBLIC OF MONTENEGRO</option>
+		  <option value="108">REUNION</option>
+		  <option value="109">ROMANIA</option>
+		  <option value="110">RUSSIAN FEDERATION</option>
+		  <option value="111">RWANDA</option>
+		  <option value="112">SAMOA</option>
+		  <option value="113">SAUDI ARABIA</option>
+		  <option value="114">SENEGAL</option>
+		  <option value="115">SERBIA</option>
+		  <option value="116">SEYCHELLES</option>
+		  <option value="117">SIERRA LEONE</option>
+		  <option value="118">SINGAPORE</option>
+		  <option value="119">SLOVENIA</option>
+		  <option value="120">SOLOMON ISLANDS</option>
+		  <option value="121">SOUTH AFRICA</option>
+		  <option value="122">SPAIN</option>
+		  <option value="123">SRI LANKA</option>
+		  <option value="124">SWEDEN</option>
+		  <option value="125">SWITZERLAND</option>
+		  <option value="126">TAIWAN, PROVINCE OF CHINA</option>
+		  <option value="127">TAJIKISTAN</option>
+		  <option value="128">TANZANIA, UNITED REPUBLIC OF</option>
+		  <option value="129">THAILAND</option>
+		  <option value="130">TIBET</option>
+		  <option value="131">TRINIDAD AND TOBAGO</option>
+		  <option value="132">TUNISIA</option>
+		  <option value="133">TURKEY</option>
+		  <option value="134">TURKMENISTAN</option>
+		  <option value="135">TURKS AND CAICOS ISLANDS</option>
+		  <option value="136">UGANDA</option>
+    	  <option value="137">UKRAINE</option>
+    	  <option value="138">UNITED ARAB EMIRATES</option>
+    	  <option value="139">UNITED KINGDOM</option>
+    	  <option value="140">UNITED STATES</option>
+    	  <option value="141">URUGUAY</option>
+    	  <option value="142">UZBEKISTAN</option>
+    	  <option value="143">VANUATU</option>
+    	  <option value="144">VENEZUELA</option>
+          <option value="145">VIETNAM</option>
+    	  <option value="146">VIRGIN ISLANDS, U.S.</option>
+    	  <option value="147">ZAMBIA</option>
+    	  <option value="148">ZIMBABWE</option>
+    	  </select>
+		<div class="item">
+          <p><h4>Net Sales</h4></p>
+          <input type="text" name="Net Sales" placeholder = "Net Sales (Between -400 to 900)" required="required"/>
+        </div>
+        <div class="item">
+          <p><h4>Commision</h4></p>
+          <input type="text" name="Commision" placeholder="Commision (in value)" required="required"/>
+         </div>
+         <div class="item">
+           <h4>Gender</h4>
+		  <select id="Gender" name="Gender">
+		  <option value="0">Female</option> 
+		  <option value="1">Male</option>
+		  <option value="2">Not Specified</option>
+		  </select>
+        </div>
+		<div class="item">
+          <p><h4>Age</h4></p>
+          <input type="text" name="Age" placeholder="Age" required="required"/>
+         </div>
+		 <div class="btn-block">
+          <button type="submit">Predict</button>
+        </div>
+      </form>
+    </div>
+    <!-- GitHub Profile -->
+	<a href="https://github.com/mohdrashed8055" target="_blank" style="positon:fixed"><img style="position: fixed; top: 0; right: 0; border: 0;" src="//s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub" /></a>
+  </body>
+</html>
